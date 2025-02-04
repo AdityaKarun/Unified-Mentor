@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+  <h2>Student Dashboard</h2>
+  
+  <!-- Section: Available Appointment Slots -->
+  <h3>Available Appointment Slots</h3>
+  {% if available_appointments %}
+    <table>
+      <thead>
+        <tr>
+          <th>Teacher</th>
+          <th>Appointment Date</th>
+          <th>Appointment Time</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for appointment in available_appointments %}
+        <tr>
+          <td>
+            {% set teacher = appointment.user %}
+            {{ teacher.username if teacher else 'Unknown' }}
+          </td>
+          <td>{{ appointment.appointment_date.strftime('%d-%m-%Y') }}</td>
+          <td>{{ appointment.appointment_date.strftime('%H:%M') }}</td>
+          <td>
+            <a href="{{ url_for('book_appointment', appointment_id=appointment.id) }}" class="btn small">Book</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No available appointment slots at the moment.</p>
+  {% endif %}
+
+  <!-- Section: Booked Appointments -->
+  <h3>Your Booked Appointments</h3>
+  {% if booked_appointments %}
+    <table>
+      <thead>
+        <tr>
+          <th>Teacher</th>
+          <th>Appointment Date</th>
+          <th>Appointment Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for appointment in booked_appointments %}
+        <tr>
+          <td>
+            {% set teacher = appointment.user %}
+            {{ teacher.username if teacher else 'Unknown' }}
+          </td>
+          <td>{{ appointment.appointment_date.strftime('%d-%m-%Y') }}</td>
+          <td>{{ appointment.appointment_date.strftime('%H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>You haven't booked any appointments yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
